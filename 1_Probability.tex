@@ -1,0 +1,301 @@
+\documentclass[11pt]{article}
+\usepackage{xcolor}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{geometry}  
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage[english]{babel} % used to create definition, and theorems
+\usepackage{amsthm}
+\usepackage{fullpage}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{physics}
+\usepackage[shortlabels]{enumitem} % to allow enumerate list to change indexing labels
+\usepackage[inline]{enumitem} % allow inline lists
+
+% \pagestyle{myheadings}
+% \markright{IOE 516 Winter 2024\ \ \textcopyright 2024 Xiyue Chen}
+
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}  % Activate to begin paragraphs with an empty line rather than an indent
+\parskip = 0.1in
+
+
+% Use one or the other of these for displaying code.
+% NOTE: If you get
+%  ! Package minted Error: You must invoke LaTeX with the -shell-escape flag.
+% and don't want to use minted, just comment out the next line
+\usepackage{minted} \BeforeBeginEnvironment{minted}{\begingroup\color{black}} \AfterEndEnvironment{minted}{\endgroup} \setminted{autogobble,breaklines,breakanywhere,linenos}
+
+\usepackage{listings}
+
+% Colours
+\definecolor{blu}{rgb}{0,0,1}
+\newcommand{\blu}[1]{{\textcolor{blu}{#1}}}
+\definecolor{gre}{rgb}{0,.5,0}
+\newcommand{\gre}[1]{\textcolor{gre}{#1}}
+\definecolor{red}{rgb}{1,0,0}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\definecolor{pointscolour}{rgb}{0.6,0.3,0}
+
+% answer commands
+\newcommand\ans[1]{\par\gre{Answer: #1}}
+\newenvironment{answer}{\par\begingroup\color{gre}Answer: }{\endgroup}
+\let\ask\blu
+\let\update\red
+
+\newenvironment{asking}{\begingroup\color{blu}}{\endgroup}
+\newcommand\pts[1]{\textcolor{pointscolour}{[#1~points]}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[subsection]
+\newtheorem{axiom}{Axiom}[section]
+\newtheorem{property}{Property}[definition]
+
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+%% inline list
+\newlist{inlist}{enumerate*}{1}
+\setlist[inlist]{label=(\roman*)}
+
+
+\begin{document}
+\begin{center}
+\textbf{IOE 516 Lecture Notes}
+\end{center}
+
+\section{Lecture 1: 2024/01/12}
+\subsection{Probability space ($\Omega$, $\mathcal{F}$, $P$)}
+    \begin{definition}
+        Define sample space to be $\Omega$, and define set of events $\mathcal{F}$. $P(A)$ is the mapping from each event $A \in \mathcal{F}$ to its probability.
+    \end{definition}
+    \begin{axiom}{Probability axioms}
+        \begin{enumerate}[(i)]
+            \item $0 \leq P(A) \leq 1$, $\forall A \in \mathcal{F}$
+            \item $P(\Omega) = 1$
+            \item If $A_1, A_2, \dots$ are mutually exclusive, then $P(\bigcup_{i=1}^n A_i) = \sum_{i=1}^n P(A_i)$.
+        \end{enumerate}
+    \end{axiom}
+    \begin{remark}
+        $\mathcal{F}$ is a set of events.
+        \begin{enumerate}[(i)]
+            \item In the case $\Omega$ is finite set, $\mathcal{F}$ can be the collection of all subsets of $\Omega$, contains $2^{|\Omega|}$ events (Power set).
+            \item If $\Omega$ is not countable, the so-called $\sigma$-algebra condition is a formal way to define all the ``measurable" events.
+        \end{enumerate}
+    \end{remark}
+\subsection{$\sigma$-algebra}
+    \begin{definition}
+    A $\sigma$-algebra $\mathcal{F}$ is a collection of subsets with: \begin{enumerate}[(i)]
+        \item $\Omega \in \mathcal{F}$;
+        \item If $A \in \mathcal{F}$, then $A^C \in \mathcal{F}$;
+        \item If $A_1, A_2, \dots \in \mathcal{F}$, then $\bigcup_{i}A_i \in \mathcal{F}$ 
+    \end{enumerate}
+    represents the information accumulated up to a point in time.
+    \end{definition}
+
+\subsection{Continuity of probability}
+    \begin{theorem}
+        \begin{enumerate}
+            \item (Increasing:) If $A_1 \subset A_2 \subset \dots$, then $\bigcup_n An = \lim_n A_n$
+            \item (Decreasing:) If If $A_1 \supset A_2 \supset \dots$, then $\bigcap_n An = \lim_n A_n$
+        \end{enumerate}
+        If $\{A_n\}$ is either increasing or decreasing, we have $P(\lim_n A_n) = \lim_n P(A_n)$
+    \end{theorem}
+    \proofname, 
+    If $\{A_n\}$ is increasing, define $B_1=A_1$, $B_2=A_2|A_1$, $B_n=A_n|A_{n-1}$, then
+    \begin{align*}
+        P(\bigcup_{n=1}^\infty A_n) &= P(\bigcup_{n=1}^\infty B_n) = \sum_{n=1}^\infty P( B_n) \text{ (axiom (iii))}\\
+        &= P(A_1) + \sum_{n=2}^\infty (P(A_n) - P(A_{n-1})) \text{ and let $A_0 = \emptyset$} \\
+        &= \sum_{n=1}^\infty (P(A_n) - P(A_{n-1})) \\
+        &= \lim_{N\to\infty}  \sum_{n=1}^N (P(A_n) - P(A_{n-1})) \\
+        &= \lim_{N\to\infty} P(A_N)
+    \end{align*}
+    
+    If $\{A_n\}$ is decreasing, then $\{A_n^C\} =  \{\Omega \setminus A_n\}$ is increasing, apply the same method.
+
+\subsection{Random Variable}
+    \begin{definition}
+        A random variable, say $X$, is a variable whose value depends on the outcome $\omega \in \Omega$. The r.v. is formally written as $X(\omega)$, $\omega \in \Omega$. 
+    
+        Therefore, the random variable is a function; and consider real random variable, then $X(\omega): \Omega \rightarrow R$.
+    \end{definition}
+    \textbf{Serveral concepts of convergence} of comparing a sequence of samples with a random variables 
+    \begin{itemize}
+        \item Convergence in probability
+        \item Almost surely convergence - stronger
+        \item Convergence in distribution - strongest
+    \end{itemize}
+    
+    \begin{definition}{Convergence in probability: } $X_n$ (a sequence of n samples) is said to converge to $X$ in probability if, for any $\epsilon > 0$, it holds that $$P(|X_n - X| > \epsilon) \rightarrow 0  \text{ as } n \rightarrow \infty$$.
+    \end{definition}
+    
+    \begin{definition}{Almost surely convergence: } $X_n$ is said to converge to $X$ almost surely (or with probability 1 if $$P(\omega: X_n(\omega) \rightarrow X(\omega)) = 1$$
+    \end{definition}
+
+    \begin{definition}{Convergence in $L^p$: } $X_n$ is said to converge to $X$ in $L^p$ if $$\mathbb{E}[|X_n - X|^p] = 0 \text{ as } n \rightarrow \infty$$
+    \end{definition}
+    
+    \begin{definition}{Convergence in distribution: } Suppose $X_n$ has cdf $F_n$ and $X$ has cdf $F$. $X_n$ is siad to converge to $X$ in distribution if, $$F_n(x) \rightarrow F(x) \text{ as } n \rightarrow \infty$$ \color{red}{on every point $x$ at which $F(x)$ is continuous.}
+    \end{definition}
+    
+    \begin{remark}
+        Almost sure convergence $\Rightarrow$ Convergence in probability $\Rightarrow$ Convergence in distribution\\
+        Almost sure convergence $\Rightarrow$ Convergence in Lp (for all $p \geq 1$) \\
+        Convergence in Lp $\Rightarrow$ Convergence in probability (for all $p \geq 1$) \\
+        Convergence in L1 $\Rightarrow$ Convergence in distribution
+
+        Note that the reverse implications do not generally hold, except in some special cases or under additional conditions.
+    \end{remark}
+
+\subsection{Probabilities Inequality}
+    \begin{theorem}{Markov inequality}
+        For non-negative random variable $X$, for any $a > 0$, we have $$P(X>a) \leq \frac{E[X]}{a}$$
+    \end{theorem}
+        \proofname: For continuous r.v. Suppose it has pdf $f(x)$. Then $$E[X] = \int_{0}^{\infty} x f(x) \,dx \geq \int_{a}^{\infty} x f(x) \,dx \geq a\int_{a}^{\infty} f(x) \,dx  = a P(X\geq a)$$
+    \begin{definition}{Chebyshev inequality}
+        Let $X$ be a random variable with finite $\mu$ and variance $\sigma^2$, then for any $\epsilon > 0$, $P(|X-\mu| >\epsilon) \leq \frac{\sigma^2}{\epsilon^2}$.
+    \end{definition}
+        \proofname: For continuous r.v. Suppose it has pdf $f(x)$. Then $$LHS = \int_{(X-\mu)^2 > \epsilon^2} f(x) \,dx \leq \int_{(X-\mu)^2 > \epsilon^2} \frac{(X-\mu)^2}{\epsilon^2} f(x) \,dx \leq \frac{1}{\epsilon^2} \int_{-\infty}^{\infty} (X-\mu)^2 f(x) \,dx = \frac{\sigma^2}{\epsilon^2}$$
+    
+\subsection{Law of Large Numbers}
+    \begin{theorem}{WLLN} Let $X_1, X_2, \dots$ be a sequence of i.i.d. random variables with finite mean $\mu$ and variance $\sigma^2$. Then $\Bar{X}_n = \frac{X_1 \dots + X_n}{n}$ is called \textbf{sample mean}.
+    Then $\Bar{X_n}$ converges to the mean $\mu$ in probability, i.e., for any $\epsilon > 0$, 
+    $$P(|\Bar{X_n} - \mu| > \epsilon) \rightarrow 0 \text{ as } n \rightarrow \infty.$$
+    \end{theorem}
+        \proofname: Use Chebyshev Inequalities.
+        Given $E[\Bar{X_n}] = \mu$ and $Var(\Bar{X_n})=\frac{\sigma^2}{n}$, then $$LHS = P(|\Bar{X_n} - \Bar{\mu}| > \epsilon) \leq \frac{\Bar{\sigma^2}}{\epsilon^2} = \frac{\sigma^2}{n\epsilon^2} $$
+
+    \begin{theorem}{SLLN}
+        $\Bar{X_n}$ converges to the mean $\mu$ almost surely. That is, for almost every sample $\omega$, we have 
+        $$\Bar{X_n} = \frac{X_1 \dots + X_n}{n} \rightarrow \mu \text{ as } n \rightarrow \infty$$
+    \end{theorem}
+        \proofname: The proof of SLLN relies on Borel-Cantelli lemma, and we will discuss it depending on time.
+
+\subsection{Discussion} 
+    \begin{example}
+    Strong Law of Large Number shows that $\frac{X_1 \dots + X_n - n E[X_1]}{n}$ converges to 0 almost surely. How fast does it go to 0?
+    \end{example} 
+    \href{https://zlearning.netlify.app/math/probability/strong-law-of-large-numbers.html}{Answer reference here}. 
+
+    \begin{example}
+        Suppose $\alpha > 0$. Does $$\frac{X_1 \dots + X_n - n E[X_1]}{n^\alpha}$$ converges as $n \rightarrow \infty$?
+    \end{example} 
+    \begin{answer}
+        \begin{itemize}
+        \item For $\alpha = 1$, it converges a.s. That implies that the same is true for any $\alpha \geq 1$.
+        \item What happens when $\alpha < 1$? In particular, what if $\alpha = 1/2$? CLT will address this. How about other values of $\alpha$?
+        \item Facts: for $\alpha \geq 1/2$, it converges to $\frac{X_1 \dots + X_n - n \mu}{\sqrt{x \log \log n}}$
+        \end{itemize}
+    \end{answer}
+
+    \begin{example}
+        How about limit theorems for random variables are not i.i.d.? In ML, RL, etc., the random variables in the next periods depend on what happened in earlier periods, hence the sequence is typically not i.i.d.
+
+        An extremely important class of dependent random variables, which which we can extend the limit theorems for i.i.d. case, is martingale process.
+    \end{example} 
+    
+
+\subsection{Moment Generating Functions}
+    \begin{definition}{MGF}
+        A moment generating function (MGF) of a random variable $X$ is defined as, for any $\theta \in R$,
+        $$M_X(\theta) = E[e^{\theta X}]$$
+        Note that MGF is a function of $\theta$, and we mostly only consider integer $\theta$.
+    \end{definition}
+    \begin{example}
+        MGF of exponential r.v $X \sim \exp{\lambda}$ with $f(x) =\lambda w^{-\lambda x}$.
+    \end{example} 
+
+    \textbf{Claim: }If the MGF of a random variable $X$ is finite in a small neighborhood of 0, then for any positive integer $n$, then 
+    $$E[X^n] = M_X^{(n)}(\theta)|_{\theta =0}$$
+    The $n^{th}$ moment is the $n^{th}$ order derivative of MGF and taking $\theta = 0$.
+
+    \textbf{Drawback of MGF: } Assumption of MGF to be finite near 0 may not be satisfied.
+    \begin{example}
+        Let $X$ be lognormal $X = e^Z$, where $Z$ is standard normal. What’s its n-th moment?
+    \end{example}
+    \begin{answer}
+        $$E[X^n] = E[e^{nZ} = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty e^{nz}e^{-z^2/2} \,dz = e^{n^2/2}$$
+        However, by change of variable $y=e^z$, $z = \log y$, and $dz = \frac{1}{y}dy$, we have any $\theta >0$,
+        \begin{align*}
+            M_X(\theta) &= E[e^{\theta X}] =  E[e^{\theta e^Z}] =\frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty e^{\theta e^Z} e^{-z^2/2} \,dz \\
+            &=\int_0^\infty \frac{1}{y}e^{\theta y} e^{-(\log y)^2/2} \,dy \\
+            &= \infty
+        \end{align*}
+    \end{answer}
+    What comes to the rescue? \textbf{Characteristic function}!
+    \begin{definition}{Characteristic function}
+    For any random variable $X$, its characteristic function is defined as 
+    $$\phi_X(\theta) = E[e^{i \theta X}]$$
+    where $i$ is the imaginary number.
+    \begin{property}
+        \begin{inlist}[(i)]
+            \item $\phi_X(0) = 1$,
+            \item $|\phi_X(\theta)| \leq 1$, for all $\theta$,
+            \item $\phi_X(\theta)$ is continuous, and 
+            \item $\phi_X^{(n)}(\theta)|_{\theta=0} = i^n E[X^n]$.
+        \end{inlist}
+    \end{property}
+    \end{definition}
+    
+    Why MGF and/or characteristic function? 
+    
+    This is the \textbf{time domain} versus \textbf{frequency domain analysis}. Using the transform, it allows us to analyze a problem that is otherwise difficult to study in time domain.
+    
+    This is just like we use Laplace transform and $z$-transform a lot in engineering.
+
+\subsection{Levy's Convergence Theorem}
+    \begin{theorem}{Levy's Convergence Theorem}
+        Let ${X_n}$ be a sequence of r.v.’s with cdf’s $F_n$ and characteristic functions $\phi_n$. Let $X$ be a random variable with cdf $F$ and characteristic function $\phi$ that is continuous at $\theta = 0$. Then, $X_n$ converges to $X$ in distribution if and only if
+        $$\phi_n(\theta) \rightarrow \phi(\theta) \text{ as } n \rightarrow \infty \text{, for any } \theta$$
+    \end{theorem}
+\subsection{Central Limit Theorem}
+    \begin{theorem}{CLT}
+        Let $X_1,X_2, \dots$ be a sequence of i.i.d.r.v.’s with mean $\mu$ and variance $\sigma^2 < \infty$ Then, 
+        $$\frac{\sum_{i=1}^{n} X_i -n\mu}{\sqrt{n}\sigma} \xrightarrow[]{d} \mathcal{N}(0,1)$$
+        Or in another equivalent form
+        $$\frac{\Bar{X}_n - \mu}{\sqrt{Var(\Bar{X}_n)}} \xrightarrow[]{d} \mathcal{N}(0,1)$$
+        This claims that $\Bar{X}_n$ is approximately normal.
+    \end{theorem}
+    \begin{remark}
+    \begin{enumerate}[(i)]
+        \item WLLN and SLLN state that $S_n = \sum_{i=1}^n X_i$ is approximately equal to $S_n \approx n\mu$.
+        \item CLT claims that $S_n \approx n\mu + \sqrt{n}\sigma \mathcal{N}(0,1)$.
+        \item This is a refinement.
+    \end{enumerate}
+    \end{remark}
+    Why true?
+    \proofname: By Levy's theorem, it suffices to show that the characteristic function of $\frac{\sum_{i=1}^{n} X_i -n\mu}{\sqrt{n}\sigma}$ converges to that of standard Normal when $n \rightarrow \infty$.
+
+    \textbf{Step 1: } Characteristic function of standard normal is 
+    $$\phi_X(\theta) = E[e^{i\theta X}] = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty e^{i\theta x} e^{- \frac{x^2}{2}}\,dx = e^{-\frac{\theta^2}{2}}$$
+
+    \textbf{Step 2.} Characteristic function of the $\frac{\sum_{i=1}^{n} X_i -n\mu}{\sqrt{n}\sigma}$ is: 
+    \begin{align}
+        \phi(\theta) &= E[e^{i\theta \frac{\sum_{i=1}^{n} X_i -n\mu}{\sqrt{n}\sigma}}] = E[e^{a\sum_{i=1}^{n} X_i}] \label{1.1}\\
+        &= E[\prod_{i=1}^n e^{aX_i}] = \prod_{i=1}^n E[ e^{aX_i}]  = (E[e^{a X_1}])^n\label{1.2}\\
+        &=(E[e^{\frac{i\theta}{\sqrt{n}\sigma} X_1}])^n \\
+        &= (\phi_{X_1}(\frac{\theta}{\sqrt{n}\sigma}))^n \\
+        &= (\phi(0) + \phi(0)' \frac{\theta}{\sqrt{n}\sigma} + \frac{1}{2} \phi(0)'' \frac{\theta^2}{n\sigma^2} + o(\frac{1}{n}))^n \label{1.3} \\
+        &= (1 + 0 - 1\cdot \frac{\sigma^2}{2}\cdot\frac{\theta^2}{n\sigma^2}^2) + o(\frac{1}{n}))^n \\
+        &=(1 - \frac{\theta^2}{2n})^n  \label{1.4}\\
+        & \rightarrow e^{\frac{\theta^2}{2}} \text{ as } n \rightarrow \infty
+    \end{align}
+    Reason to get steps:
+    \begin{itemize}
+        \item \eqref{1.1} assume $\mu = 0$ and replace $a = \frac{i\theta}{\sqrt{n}\sigma}$,
+        \item \eqref{1.2} given by i.i.d. assumption,
+        \item \eqref{1.3} given be $\phi(x) = \phi(0) + \phi(0)' x + \frac{1}{2} \phi(0)\prime \prime x^2 + o(x^2)$,
+        \item \eqref{1.4} given by $(1 + \frac{a}{n}+o(\frac{1}{n}))^n \rightarrow e^a$.
+    \end{itemize}
+    Therefore the characteristics function converges, then prove that $\frac{\sum_{i=1}^{n} X_i -n\mu}{\sqrt{n}\sigma}\xrightarrow{d} \mathcal{N}(0,1)$ (converge in distribution). Q.E.D.
+\end{document}
