@@ -37,6 +37,7 @@
 \definecolor{blu}{rgb}{0,0,1}
 \newcommand{\blu}[1]{{\textcolor{blu}{#1}}}
 \definecolor{gre}{rgb}{0,.5,0}
+
 \newcommand{\gre}[1]{\textcolor{gre}{#1}}
 \definecolor{red}{rgb}{1,0,0}
 \newcommand{\red}[1]{\textcolor{red}{#1}}
@@ -47,6 +48,23 @@
 \newenvironment{answer}{\par\begingroup\color{gre}Answer: }{\endgroup}
 \let\ask\blu
 \let\update\red
+
+\newcommand{\E}{\textbf{E}}
+\newcommand{\ad}{\text{ad}}
+\newcommand{\I}{\textbf{Inn($\mathfrak{g}$)}}
+\newcommand{\D}{\textbf{Der($\mathfrak{g}$)}}
+\newcommand{\g}{\mathfrak{g}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\cha}{\textbf{1}}
+\newcommand{\prob}{\mathbb P}
+\newcommand{\SL}{\text{SL} }
+\newcommand{\GL}{\text{GL} }
+\newcommand{\re}{\text{Re} }
+\newcommand{\im}{\text{Im} }
+\newcommand{\la}{\langle }
+\newcommand{\ra}{\rangle }
+\newcommand{\fraksl}{\mathfrak{sl} }
+\newcommand{\tr}{\text{Trace} }
 
 \newenvironment{asking}{\begingroup\color{blu}}{\endgroup}
 \newcommand\pts[1]{\textcolor{pointscolour}{[#1~points]}}
@@ -71,9 +89,9 @@
 
 \begin{document}
 \begin{center}
-\textbf{IOE 516 Lecture Notes}
+\textbf{IOE 516: Stochastic Process II Lecture Notes}
 \end{center}
-
+%=========================================================================================
 \section{Lecture 1: 2024/01/12}
 \subsection{Probability space ($\Omega$, $\mathcal{F}$, $P$)}
     \begin{definition}
@@ -123,7 +141,7 @@
     
     If $\{A_n\}$ is decreasing, then $\{A_n^C\} =  \{\Omega \setminus A_n\}$ is increasing, apply the same method.
 
-\subsection{Random Variable}
+\subsection{Random Variable and Convergence}
     \begin{definition}
         A random variable, say $X$, is a variable whose value depends on the outcome $\omega \in \Omega$. The r.v. is formally written as $X(\omega)$, $\omega \in \Omega$. 
     
@@ -298,4 +316,28 @@
         \item \eqref{1.4} given by $(1 + \frac{a}{n}+o(\frac{1}{n}))^n \rightarrow e^a$.
     \end{itemize}
     Therefore the characteristics function converges, then prove that $\frac{\sum_{i=1}^{n} X_i -n\mu}{\sqrt{n}\sigma}\xrightarrow{d} \mathcal{N}(0,1)$ (converge in distribution). Q.E.D.
+
+%=========================================================================================
+\section{Lecture 8: 2024/03/08}
+    \subsection{Renewal Function}
+        \begin{definition}
+            The average number of renewals $m(t) = \E[N(t)]$ is called renewal function.
+        \end{definition}
+        \begin{remark}
+            $\{N(t) \geq n\} \Leftrightarrow S_n \leq t$, proof by illustration of the arrival processes.
+        \end{remark}
+        \begin{remark}
+            $m(t) < \infty$ for any $t \geq 0$, why?
+        \end{remark}
+        \begin{remark}
+            Recall the number of renewal $N(t) = \sum_{n=1}^\infty \cha[S_n \leq t]$, then the 
+            $$m(t) = \E[N(t)] = \sum_{n=1}^\infty \Pr[S_n \leq t]$$
+        \end{remark}
+    \subsection{Renewal Equation}
+    \begin{definition}
+        The renewal function satisfies renewal equation $$m(t) = F(t) + \int_0^t m(t-s) dF(s),$$
+        The equation is obtained by conditioning on the first renewal event. Note that $F(t) = \Pr[x \leq t]$ and $f(s)ds = dF(s)$.
+    \end{definition}
+    \subsection{Elementary Renewal Theorem}
+    \subsection{}
 \end{document}
